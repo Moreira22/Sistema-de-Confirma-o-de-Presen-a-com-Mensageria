@@ -13,20 +13,9 @@ export const metadata: Metadata = {
   description: 'Sistema de confirmacao de presenca para eventos com verificacao por e-mail',
   icons: {
     icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
+    
     ],
-    apple: '/apple-icon.png',
+  
   },
 }
 

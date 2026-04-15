@@ -1,7 +1,6 @@
 package com.example.gestao_convidados.controller;
-
-import com.example.gestao_convidados.service.ConvidadoService;
-import com.example.gestao_convidados.service.dto.ConvidadoDTO;
+import com.example.gestao_convidados.service.UsuarioService;
+import com.example.gestao_convidados.service.dto.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,29 +13,28 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/app/convidados")
-public class ConvidadoController {
-
+@RequestMapping("/app/usuario")
+public class UsuarioController {
     @Autowired
-    private ConvidadoService service;
+    private UsuarioService service;
 
     @PostMapping
-    public ResponseEntity<ConvidadoDTO> criar(@RequestBody ConvidadoDTO dto) {
+    public ResponseEntity<UsuarioDTO> criar(@RequestBody UsuarioDTO dto) {
 
-        ConvidadoDTO novo = service.salvar(dto);
+        UsuarioDTO novo = service.salvar(dto);
 
         return ResponseEntity.ok(novo);
     }
 
     @GetMapping("/liste")
-    public ResponseEntity<List<ConvidadoDTO>> liste(){
+    public ResponseEntity<List<UsuarioDTO>> liste(){
         return ResponseEntity.ok(service.listar());
     }
 
     @GetMapping("/bussca/{Id}")
-    public ResponseEntity<ConvidadoDTO> buscar(@PathVariable Long Id) {
+    public ResponseEntity<UsuarioDTO> buscar(@PathVariable Long Id) {
 
-        ConvidadoDTO dto = service.findById(Id);
+        UsuarioDTO dto = service.findById(Id);
 
         if (dto == null) {
             return ResponseEntity.notFound().build();

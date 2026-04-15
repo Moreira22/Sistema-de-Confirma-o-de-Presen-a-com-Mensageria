@@ -7,6 +7,8 @@ import com.example.gestao_convidados.service.mapper.ConvidadoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ConvidadoService {
 
@@ -16,13 +18,21 @@ public class ConvidadoService {
     @Autowired
     private ConvidadoMapper mapper;
 
+
+    public Convidado findEntity(Long id){
+        return repository.findById(id).orElse(null);
+    }
+
+    public ConvidadoDTO findById(Long id){
+        return  mapper.toDto(findEntity(id));
+    }
+
+    public List<ConvidadoDTO> listar(){
+        return mapper.toDto(repository.findAll());
+    }
+
     public ConvidadoDTO salvar(ConvidadoDTO dto) {
-
-        Convidado convidado = mapper.toEntity(dto);
-
-        convidado = repository.save(convidado);
-
-        return mapper.toDTO(convidado);
+        return mapper.toDto( repository.save(mapper.toEntity(dto)));
     }
 
 }

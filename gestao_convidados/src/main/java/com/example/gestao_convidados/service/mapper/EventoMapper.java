@@ -4,10 +4,15 @@ import com.example.gestao_convidados.model.Evento;
 import com.example.gestao_convidados.service.dto.EventoDTO;
 import org.mapstruct.Mapper;
 
+import org.mapstruct.InheritInverseConfiguration;
+
 @Mapper(componentModel = "spring")
-public interface EventoMapper {
+public interface EventoMapper extends EntityMapper<EventoDTO,Evento>{
 
-    EventoDTO toDTO(Evento evento);
+    @Override
+    EventoDTO toDto(Evento evento);
 
+    @Override
+    @InheritInverseConfiguration
     Evento toEntity(EventoDTO dto);
 }

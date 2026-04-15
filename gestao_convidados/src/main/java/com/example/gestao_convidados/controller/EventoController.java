@@ -26,7 +26,7 @@ public class EventoController {
         return ResponseEntity.ok(novo);
     }
 
-    @GetMapping("/lista")
+    @GetMapping("/liste")
     public ResponseEntity<List<EventoDTO>> liste(){
         return ResponseEntity.ok(service.listar());
     }

@@ -18,6 +18,9 @@ public class ConvidadoService {
     @Autowired
     private ConvidadoMapper mapper;
 
+    @Autowired
+    private EmailService emailService;
+
 
     public Convidado findEntity(Long id){
         return repository.findById(id).orElse(null);
@@ -31,8 +34,27 @@ public class ConvidadoService {
         return mapper.toDto(repository.findAll());
     }
 
+    public List<ConvidadoDTO> listarPorEvento(Long idEvento ){
+        return mapper.toDto(repository.findByEventoId(idEvento));
+    }
+
     public ConvidadoDTO salvar(ConvidadoDTO dto) {
         return mapper.toDto( repository.save(mapper.toEntity(dto)));
+    }
+
+    public void enviarConfirmacao(ConvidadoDTO dto) {
+
+        String codigo = emailService.gerarCodigo();
+
+        dto.setCodigoConfirmacao(codigo);
+
+        repository.save(mapper.toEntity(dto));
+
+        emailService.enviarCodigoConfirmacao(
+                dto.getEmail(),
+                dto.getNome(),
+                codigo
+        );
     }
 
 }

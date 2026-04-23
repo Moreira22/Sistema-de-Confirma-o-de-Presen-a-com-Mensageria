@@ -44,4 +44,19 @@ public class ConvidadoController {
 
         return ResponseEntity.ok(dto);
     }
+
+    @GetMapping("/listaPorEvento/{Id}")
+    public ResponseEntity<List<ConvidadoDTO>> listaPorEvento(@PathVariable Long Id) {
+        return ResponseEntity.ok(service.listarPorEvento(Id));
+    }
+
+    @PostMapping("/convidados/{id}/confirmar")
+    public ResponseEntity enviarConfirmacao(@PathVariable Long id) {
+
+        ConvidadoDTO convidado = service.findById(id);
+
+        service.enviarConfirmacao(convidado);
+
+        return ResponseEntity.ok("Email enviado com sucesso");
+    }
 }

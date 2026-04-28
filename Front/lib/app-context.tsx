@@ -1,15 +1,15 @@
 "use client"
 
 import { createContext, useContext, useState, useCallback, type ReactNode } from "react"
-import { mockGuests, type Guest } from "@/lib/data"
+import { mockConvidado, type Convidado } from "@/lib/data"
 
 interface AppState {
-  guests: Guest[]
+  guests: Convidado[]
   isAuthenticated: boolean
   login: (email: string, password: string) => boolean
   logout: () => void
-  addGuest: (guest: Omit<Guest, "id">) => void
-  updateGuest: (id: string, guest: Partial<Guest>) => void
+  addGuest: (guest: Omit<Convidado, "id">) => void
+  updateGuest: (id: string, guest: Partial<Convidado>) => void
   deleteGuest: (id: string) => void
   confirmGuest: (id: string) => void
 }
@@ -17,7 +17,7 @@ interface AppState {
 const AppContext = createContext<AppState | undefined>(undefined)
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [guests, setGuests] = useState<Guest[]>(mockGuests)
+  const [guests, setGuests] = useState<Convidado[]>(mockConvidado)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   const login = useCallback((email: string, password: string) => {
@@ -32,15 +32,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setIsAuthenticated(false)
   }, [])
 
-  const addGuest = useCallback((guest: Omit<Guest, "id">) => {
-    const newGuest: Guest = {
+  const addGuest = useCallback((guest: Omit<Convidado, "id">) => {
+    const newGuest: Convidado = {
       ...guest,
       id: Date.now().toString(),
     }
     setGuests((prev) => [...prev, newGuest])
   }, [])
 
-  const updateGuest = useCallback((id: string, data: Partial<Guest>) => {
+  const updateGuest = useCallback((id: string, data: Partial<Convidado>) => {
     setGuests((prev) =>
       prev.map((g) => (g.id === id ? { ...g, ...data } : g))
     )
@@ -52,7 +52,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const confirmGuest = useCallback((id: string) => {
     setGuests((prev) =>
-      prev.map((g) => (g.id === id ? { ...g, status: "confirmado" } : g))
+      prev.map((g) => (g.id === id ? { ...g, confirmado: true } : g))
     )
   }, [])
 

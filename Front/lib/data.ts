@@ -1,107 +1,107 @@
-export interface Guest {
+export interface Convidado {
   id: string
-  name: string
+  nome: string
   cpf: string
-  phone: string
+  telefone: string
   email: string
-  status: "pendente" | "confirmado"
+  confirmado: boolean
 }
 
-export const mockGuests: Guest[] = [
+export const mockConvidado: Convidado[] = [
   {
     id: "1",
-    name: "Ana Clara Mendes",
+    nome: "Ana Clara Mendes",
     cpf: "123.456.789-00",
-    phone: "(11) 98765-4321",
+    telefone: "(11) 98765-4321",
     email: "ana.mendes@email.com",
-    status: "confirmado",
+    confirmado: true,
   },
   {
     id: "2",
-    name: "Bruno Ferreira Lima",
+    nome: "Bruno Ferreira Lima",
     cpf: "234.567.890-11",
-    phone: "(21) 97654-3210",
+    telefone: "(21) 97654-3210",
     email: "bruno.lima@email.com",
-    status: "pendente",
+    confirmado: false,
   },
   {
     id: "3",
-    name: "Carla Souza Pereira",
+    nome: "Carla Souza Pereira",
     cpf: "345.678.901-22",
-    phone: "(31) 96543-2109",
+    telefone: "(31) 96543-2109",
     email: "carla.pereira@email.com",
-    status: "confirmado",
+    confirmado: false,
   },
   {
     id: "4",
-    name: "Diego Oliveira Santos",
+    nome: "Diego Oliveira Santos",
     cpf: "456.789.012-33",
-    phone: "(41) 95432-1098",
+    telefone: "(41) 95432-1098",
     email: "diego.santos@email.com",
-    status: "pendente",
+    confirmado: true,
   },
   {
     id: "5",
-    name: "Elena Rodrigues Silva",
+    nome: "Elena Rodrigues Silva",
     cpf: "567.890.123-44",
-    phone: "(51) 94321-0987",
+    telefone: "(51) 94321-0987",
     email: "elena.silva@email.com",
-    status: "confirmado",
+    confirmado: true,
   },
   {
     id: "6",
-    name: "Fernando Costa Almeida",
+    nome: "Fernando Costa Almeida",
     cpf: "678.901.234-55",
-    phone: "(61) 93210-9876",
+    telefone: "(61) 93210-9876",
     email: "fernando.almeida@email.com",
-    status: "pendente",
+    confirmado: true,
   },
   {
     id: "7",
-    name: "Gabriela Nascimento Dias",
+    nome: "Gabriela Nascimento Dias",
     cpf: "789.012.345-66",
-    phone: "(71) 92109-8765",
+    telefone: "(71) 92109-8765",
     email: "gabriela.dias@email.com",
-    status: "pendente",
+    confirmado: false,
   },
   {
     id: "8",
-    name: "Hugo Martins Ribeiro",
+    nome: "Hugo Martins Ribeiro",
     cpf: "890.123.456-77",
-    phone: "(81) 91098-7654",
+    telefone: "(81) 91098-7654",
     email: "hugo.ribeiro@email.com",
-    status: "confirmado",
+    confirmado: true,
   },
   {
     id: "9",
-    name: "Isabela Gomes Teixeira",
+    nome: "Isabela Gomes Teixeira",
     cpf: "901.234.567-88",
-    phone: "(91) 90987-6543",
+    telefone: "(91) 90987-6543",
     email: "isabela.teixeira@email.com",
-    status: "pendente",
+    confirmado: false,
   },
   {
     id: "10",
-    name: "Joaquim Barros Cardoso",
+    nome: "Joaquim Barros Cardoso",
     cpf: "012.345.678-99",
-    phone: "(11) 99876-5432",
+    telefone: "(11) 99876-5432",
     email: "joaquim.cardoso@email.com",
-    status: "confirmado",
+    confirmado: true,
   },
   {
     id: "11",
-    name: "Larissa Fernandes Rocha",
+    nome: "Larissa Fernandes Rocha",
     cpf: "111.222.333-44",
-    phone: "(21) 98765-1234",
+    telefone: "(21) 98765-1234",
     email: "larissa.rocha@email.com",
-    status: "pendente",
+    confirmado: true,
   },
   {
     id: "12",
-    name: "Marcos Henrique Campos",
+    nome: "Marcos Henrique Campos",
     cpf: "222.333.444-55",
-    phone: "(31) 97654-2345",
+    telefone: "(31) 97654-2345",
     email: "marcos.campos@email.com",
-    status: "confirmado",
+    confirmado: false,
   },
 ]

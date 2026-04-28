@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/app/convidados")
+@RequestMapping("/api/convidado")
 public class ConvidadoController {
 
     @Autowired

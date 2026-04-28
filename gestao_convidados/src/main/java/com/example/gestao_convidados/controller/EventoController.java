@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/app/evento")
+@RequestMapping("/api/evento")
 public class EventoController {
     @Autowired
     private EventoService service;
@@ -37,7 +37,7 @@ public class EventoController {
         return ResponseEntity.ok(service.listarPorUsuarrio(IdUsurio));
     }
 
-    @GetMapping("/bussca/{machineId}")
+    @GetMapping("/bussca/{Id}")
     public ResponseEntity<EventoDTO> buscar(@PathVariable Long Id) {
 
         EventoDTO dto = service.findById(Id);

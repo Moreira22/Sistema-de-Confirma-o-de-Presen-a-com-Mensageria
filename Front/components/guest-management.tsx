@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import {useState, useMemo, useEffect} from "react"
 import { useApp } from "@/lib/app-context"
-import type { Guest } from "@/lib/data"
+import type { Convidado } from "@/lib/data"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -43,37 +43,48 @@ import {
 } from "@/components/ui/select"
 import { Plus, Pencil, Trash2, Search, UserPlus } from "lucide-react"
 import { toast } from "sonner"
+import {buscarConvidados} from "@/lib/data";
 
 type FormData = {
-  name: string
+  nome: string
   cpf: string
-  phone: string
+  telefone: string
   email: string
-  status: "pendente" | "confirmado"
+  confirmado: boolean
 }
 
 const emptyForm: FormData = {
-  name: "",
+  nome: "",
   cpf: "",
-  phone: "",
+  telefone: "",
   email: "",
-  status: "pendente",
+  confirmado: false,
 }
 
 export function GuestManagement() {
-  const { guests, addGuest, updateGuest, deleteGuest } = useApp()
+  const { addGuest, updateGuest, deleteGuest } = useApp()
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [form, setForm] = useState<FormData>(emptyForm)
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [search, setSearch] = useState("")
   const [filterStatus, setFilterStatus] = useState<string>("todos")
+  const [guests, setGuests] = useState<Convidado[]>([]);
+
+  useEffect(() => {
+    async function carregarConvidados() {
+      const convidados = await buscarConvidados();
+      setGuests(convidados);
+    }
+
+    carregarConvidados();
+  }, []);
 
   const filteredGuests = useMemo(() => {
     return guests.filter((g) => {
       const matchStatus = filterStatus === "todos" || g.status === filterStatus
       const matchSearch =
-        g.name.toLowerCase().includes(search.toLowerCase()) ||
+        g.nome.toLowerCase().includes(search.toLowerCase()) ||
         g.email.toLowerCase().includes(search.toLowerCase())
       return matchStatus && matchSearch
     })
@@ -85,20 +96,20 @@ export function GuestManagement() {
     setShowForm(true)
   }
 
-  const openEdit = (guest: Guest) => {
+  const openEdit = (guest: Convidado) => {
     setEditingId(guest.id)
     setForm({
-      name: guest.name,
+      nome: guest.nome,
       cpf: guest.cpf,
-      phone: guest.phone,
+      telefone: guest.telefone,
       email: guest.email,
-      status: guest.status,
+      confirmado: guest.confirmado,
     })
     setShowForm(true)
   }
 
   const handleSave = () => {
-    if (!form.name.trim() ) {
+    if (!form.nome.trim() ) {
       toast.error("Preencha os campos obrigatorios (Nome).")
       return
     }
@@ -190,12 +201,12 @@ export function GuestManagement() {
               <TableBody>
                 {filteredGuests.map((guest) => (
                   <TableRow key={guest.id}>
-                    <TableCell className="font-medium text-foreground">{guest.name}</TableCell>
+                    <TableCell className="font-medium text-foreground">{guest.nome}</TableCell>
                     <TableCell className="hidden text-muted-foreground md:table-cell">
                       {guest.email}
                     </TableCell>
                     <TableCell className="hidden text-muted-foreground lg:table-cell">
-                      {guest.phone}
+                      {guest.telefone}
                     </TableCell>
                     <TableCell className="hidden text-muted-foreground lg:table-cell">
                       {guest.cpf || "-"}
@@ -203,13 +214,13 @@ export function GuestManagement() {
                     <TableCell>
                       <Badge
                         className={
-                          guest.status === "confirmado"
+                          guest.confirmado === true
                             ? "bg-success/15 text-success border-success/20"
                             : "bg-muted text-muted-foreground border-border"
                         }
                         variant="outline"
                       >
-                        {guest.status === "confirmado" ? "Confirmado" : "Pendente"}
+                        {guest.confirmado === true ? "Confirmado" : "Pendente"}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -280,8 +291,8 @@ export function GuestManagement() {
               <Input
                 id="guest-name"
                 placeholder="Nome do convidado"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                value={form.nome}
+                onChange={(e) => setForm({ ...form, nome: e.target.value })}
               />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -299,8 +310,8 @@ export function GuestManagement() {
                 <Input
                   id="guest-phone"
                   placeholder="(00) 00000-0000"
-                  value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  value={form.telefone}
+                  onChange={(e) => setForm({ ...form, telefone: e.target.value })}
                 />
               </div>
             </div>
@@ -319,17 +330,21 @@ export function GuestManagement() {
             <div className="flex flex-col gap-2">
               <Label>Status</Label>
               <Select
-                value={form.status}
-                onValueChange={(val) =>
-                  setForm({ ...form, status: val as "pendente" | "confirmado" })
-                }
+                  value={String(form.confirmado)}
+                  onValueChange={(val) =>
+                      setForm({
+                        ...form,
+                        confirmado: val === "true",
+                      })
+                  }
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
+
                 <SelectContent>
-                  <SelectItem value="pendente">Pendente</SelectItem>
-                  <SelectItem value="confirmado">Confirmado</SelectItem>
+                  <SelectItem value="true">Confirmado</SelectItem>
+                  <SelectItem value="false">Pendente</SelectItem>
                 </SelectContent>
               </Select>
             </div>

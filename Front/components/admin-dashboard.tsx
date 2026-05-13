@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import {useEffect, useMemo, useState} from "react"
 import { useApp } from "@/lib/app-context"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -24,24 +24,34 @@ import {
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
 import { Users, CheckCircle2, Clock, TrendingUp, Search } from "lucide-react"
+import {Convidado, buscarConvidados} from "@/lib/data";
 
 export function AdminDashboard() {
-  const { guests } = useApp()
-  const [filterStatus, setFilterStatus] = useState<string>("todos")
+  const [guests, setGuests] = useState<Convidado[]>([]);
+  const [filterStatus, setFilterStatus] = useState<boolean>(true)
   const [search, setSearch] = useState("")
+
+  useEffect(() => {
+    async function carregarConvidados() {
+      const convidados = await buscarConvidados();
+      setGuests(convidados);
+    }
+
+    carregarConvidados();
+  }, []);
 
   const stats = useMemo(() => {
     const total = guests.length
-    const confirmed = guests.filter((g) => g.status === "confirmado").length
-    const pending = guests.filter((g) => g.status === "pendente").length
+    const confirmed = guests.filter((g) => g.confirmado === true).length
+    const pending = guests.filter((g) => g.confirmado === false).length
     const percent = total > 0 ? Math.round((confirmed / total) * 100) : 0
     return { total, confirmed, pending, percent }
   }, [guests])
 
   const pieData = useMemo(
     () => [
-      { name: "Confirmados", value: stats.confirmed },
-      { name: "Pendentes", value: stats.pending },
+      { name: "Confirmado", value: stats.confirmed },
+      { name: "Pendente", value: stats.pending },
     ],
     [stats]
   )
@@ -50,19 +60,19 @@ export function AdminDashboard() {
   const PIE_COLORS = ["#2b8a3e", "#868e96"]
 
   const barData = useMemo(
-    () => [
-      { name: "Confirmados", quantidade: stats.confirmed },
-      { name: "Pendentes", quantidade: stats.pending },
-    ],
-    [stats]
+      () => [
+        { name: "Confirmados", quantidade: stats.confirmed },
+        { name: "Pendentes", quantidade: stats.pending },
+      ],
+      [stats]
   )
 
   const BAR_COLORS = ["#2b8a3e", "#868e96"]
 
   const filteredGuests = useMemo(() => {
     return guests.filter((g) => {
-      const matchStatus = filterStatus === "todos" || g.status === filterStatus
-      const matchSearch = g.name.toLowerCase().includes(search.toLowerCase())
+      const matchStatus = filterStatus === true || g.confirmado === filterStatus
+      const matchSearch = g.nome.toLowerCase().includes(search.toLowerCase())
       return matchStatus && matchSearch
     })
   }, [guests, filterStatus, search])
@@ -255,19 +265,19 @@ export function AdminDashboard() {
               <TableBody>
                 {filteredGuests.map((guest) => (
                   <TableRow key={guest.id}>
-                    <TableCell className="font-medium text-foreground">{guest.name}</TableCell>
+                    <TableCell className="font-medium text-foreground">{guest.nome}</TableCell>
                     <TableCell className="hidden text-muted-foreground md:table-cell">{guest.email}</TableCell>
-                    <TableCell className="hidden text-muted-foreground sm:table-cell">{guest.phone}</TableCell>
+                    <TableCell className="hidden text-muted-foreground sm:table-cell">{guest.telefone}</TableCell>
                     <TableCell>
                       <Badge
                         className={
-                          guest.status === "confirmado"
+                          guest.confirmado === true
                             ? "bg-success/15 text-success border-success/20"
                             : "bg-muted text-muted-foreground border-border"
                         }
                         variant="outline"
                       >
-                        {guest.status === "confirmado" ? "Confirmado" : "Pendente"}
+                        {guest.confirmado === true ? "Confirmado" : "Pendente"}
                       </Badge>
                     </TableCell>
                   </TableRow>

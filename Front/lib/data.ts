@@ -1,3 +1,4 @@
+import axios from "axios";
 export interface Convidado {
   id: string
   nome: string
@@ -105,3 +106,16 @@ export const mockConvidado: Convidado[] = [
     confirmado: false,
   },
 ]
+
+const API_URL = "http://localhost:8080/api/convidado/liste";
+
+export async function buscarConvidados(): Promise<Convidado[]> {
+  try {
+    const response = await axios.get<Convidado[]>(API_URL);
+
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar convidados:", error);
+    return [];
+  }
+}
